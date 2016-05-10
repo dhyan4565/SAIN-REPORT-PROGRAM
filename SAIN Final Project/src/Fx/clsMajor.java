@@ -36,6 +36,11 @@ public class clsMajor extends Application {
     MajorController MyController = new MajorController();
     Major CurrentMajor = new Major();
     List selectedRow = null;
+    SearchView sview;
+    public LoginView lv = new LoginView();
+
+    boolean isStudent = false;
+    public String username = null;
 
     private BorderPane root;
     private TableView table = new TableView();
@@ -48,7 +53,7 @@ public class clsMajor extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         stage.setTitle("Final Project");
         root = new BorderPane();
         Scene scene = new Scene(root, 1000, 400);
@@ -65,7 +70,7 @@ public class clsMajor extends Application {
         stage.show();
     }
 
-    private HBox majorPane() {
+    public HBox majorPane() {
         HBox majorPane = new HBox();
         majorPane.setPadding(new Insets(10, 10, 10, 10));
         majorPane.setMinWidth(650);
@@ -179,8 +184,19 @@ public class clsMajor extends Application {
         });
 
         exit.setOnAction(e -> {
+//        	lv.start(primaryStage);
             System.exit(0);
         });
+        
+        if (isStudent) {
+            id1.setText(username);
+            LoadData(id1.getText());
+            Save.setDisable(true);
+            add.setDisable(true);
+            delete.setDisable(true);
+            edit.setDisable(true);
+        }
+        
         HBox hb3 = new HBox();
         hb3.setSpacing(25);
         hb3.setAlignment(Pos.BOTTOM_RIGHT);

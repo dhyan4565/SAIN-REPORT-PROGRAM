@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 
 public class LoginView extends Application {
 
-    Stage window;
+    public Stage window;
     ComboBox<String> selectFile;
     LoginController MyController = new LoginController();
     SearchView sv = new SearchView();
@@ -25,7 +25,7 @@ public class LoginView extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage){
         window = primaryStage;
         window.setTitle("Login View");
 
@@ -56,8 +56,6 @@ public class LoginView extends Application {
 
         selectFile = new ComboBox<String>();
         selectFile.getItems().addAll("Staff", "Student");
-        
-        
 
         Button login = new Button("Login");
         GridPane.setConstraints(login, 1, 3);
@@ -67,25 +65,31 @@ public class LoginView extends Application {
                 flag = MyController.VailidateStaff(input.getText(), input1.getText());
             } else if (selectFile.getValue().equals("Student")) {
                 flag = MyController.VailidateStudent(input.getText(), input1.getText());
-            } else if (selectFile == null){
-                	input.setText("Select SorF");
+            } else if (selectFile == null) {
+                input.setText("Select SorF");
             }
             if (flag) {
-            	try {
-					sv.start(window);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
+                try {
+                    if (selectFile.getValue().equals("Staff")) {
+                         sv.start(window);
+                    } else {
+                        sv.isStudent = true;
+                        sv.username = input.getText();
+//                        Stage stage = new Stage();
+//                        
+//                        stage.show();
+                        sv.start(window);
+                    }
+
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
             } else {
-            	try {
-					sv.start(window);
-				} catch (Exception e1) {
-					sv.input.setDisable(true);
-					e1.printStackTrace();
-				}
-            	
+            	sv.input.setText("Enter Again");
             }
-          
+                
+            
+
         });
 
         grid.getChildren().addAll(label, label1, input, input1, login, labelType, selectFile);

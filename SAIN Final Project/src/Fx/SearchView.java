@@ -24,9 +24,11 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class SearchView extends Application {
-	addStudentView edit1;
-	clsCourse crs1;
-    Stage window;
+
+    clsMajor major;
+    addStudentView edit1;
+    clsCourse crs1;
+    public Stage window;
     Label txtName;
     Label txtAddress;
     Label txtGpa;
@@ -42,9 +44,11 @@ public class SearchView extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+    boolean isStudent = false;
+    String username = null;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         window = primaryStage;
         window.setTitle("Search View");
 
@@ -62,6 +66,7 @@ public class SearchView extends Application {
 
         Button ok = new Button("Find");
         GridPane.setConstraints(ok, 1, 1);
+
         ok.setOnAction(e -> {
             LoadData(input.getText());
         });
@@ -83,27 +88,56 @@ public class SearchView extends Application {
         courseNum.setMinWidth(110);
         courseNum.setCellValueFactory(
                 new PropertyValueFactory<clsCourseStudent, String>("coursetitle"));
-        
+
         edit1 = new addStudentView();
         Button edit = new Button("Edit");
         edit.setOnAction(e -> {
-        	try {
-				edit1.start(primaryStage);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+        	 try {
+                 if (!isStudent) {
+                     edit1.start(primaryStage);
+                 } else {
+                     edit1.isStudent = true;
+                     edit1.username = input.getText();
+                     edit1.start(primaryStage);
+                 }
+
+             } catch (Exception e1) {
+                 e1.printStackTrace();
+             }
         });
-        
+
+        major = new clsMajor();
+        Button addMajor = new Button("Add Major");
+        addMajor.setOnAction(e -> {
+            try {
+                if (!isStudent) {
+                    major.start(primaryStage);
+                } else {
+                    major.isStudent = true;
+                    major.username = input.getText();
+                    major.start(primaryStage);
+                }
+
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+
+        });
+
         crs1 = new clsCourse();
         Button courseButton = new Button("Add Course");
         courseButton.setOnAction(e -> {
-        	try {
-				crs1.start(primaryStage);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+        	 try {
+                 if (!isStudent) {
+                     crs1.start(primaryStage);
+                 } else {
+                     crs1.isStudent = true;
+                     crs1.start(primaryStage);
+                 }
+
+             } catch (Exception e1) {
+                 e1.printStackTrace();
+             }
         });
 
         TableColumn courseTitle = new TableColumn("Type");
@@ -145,12 +179,18 @@ public class SearchView extends Application {
         GridPane.setConstraints(lblType, 0, 6);
         GridPane.setConstraints(selectFile, 1, 6);
         GridPane.setConstraints(courseButton, 1, 8);
+        GridPane.setConstraints(addMajor, 2, 8);
         GridPane.setConstraints(table, 1, 9);
         GridPane.setConstraints(edit, 1, 7);
-        
-        grid.getChildren().addAll(label, input, ok, lblName, lblAddress, lblGpa, txtAddress
-        		, txtGpa, txtName, lblMajor, txtMajor, table, lblType, selectFile, edit, courseButton);
 
+        grid.getChildren().addAll(label, input, ok, lblName, lblAddress, lblGpa, txtAddress, txtGpa, txtName, lblMajor,
+                txtMajor, table, lblType, selectFile, edit, courseButton, addMajor);
+
+        if (isStudent) {
+            input.setText(username);
+            LoadData(input.getText());
+            ok.setDisable(true);
+        }
         Scene scene = new Scene(grid, 500, 500);
         window.setScene(scene);
         window.show();

@@ -47,16 +47,22 @@ public class clsCourse extends Application {
     TextField title;
     TextField credits;
     TextField grade1;
+    
+    boolean isStudent = false;
+    public String username = null;
 
     public static void main(String[] args) {
         launch(args);
     }
 
+    Button add = new Button("Add");
+    Button delete = new Button("Delete");
+    
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("Final Project");
         root = new BorderPane();
-        Scene scene = new Scene(root, 980, 250);
+        Scene scene = new Scene(root, 1100, 250);
 //        clsSample s1 = new clsSample();
         VBox top = new VBox(10);
         top.setAlignment(Pos.BASELINE_CENTER);
@@ -66,6 +72,11 @@ public class clsCourse extends Application {
         HBox bottom = new HBox(10);
         bottom.setAlignment(Pos.BASELINE_CENTER);
         root.setBottom(bottom);
+        
+        if (isStudent) {
+            add.setDisable(true);
+            delete.setDisable(true);
+        }
 
 //        bottom.getChildren().addAll(menuBar());
         //set scene to stage & show
@@ -120,8 +131,7 @@ public class clsCourse extends Application {
             }
         });
 
-        Button add = new Button("Add");
-        Button delete = new Button("Delete");
+      
         add.setOnAction(e -> {
             Course obj = new Course();
             obj.setCourseNum(crn.getText());

@@ -42,6 +42,9 @@ public class addStudentView extends Application {
     StudentController MyController = new StudentController();
     Student CurrentStudent = new Student();
     List selectedRow = null;
+    
+    boolean isStudent = false;
+    public String username = null;
 
     public static void main(String[] args) {
         launch(args);
@@ -67,14 +70,30 @@ public class addStudentView extends Application {
         HBox bottom = new HBox(10);
         bottom.setAlignment(Pos.BASELINE_LEFT);
         root.setBottom(bottom);
+        
+        if (isStudent) {
+            userId1.setText(username);
+            LoadData(userId1.getText());
+            Save.setDisable(true);
+            add.setDisable(true);
+            delete.setDisable(true);
+            userId1.textProperty().addListener((observable, oldValue, newValue) -> {
+                LoadData(newValue);
+                /*LoadData*/        });
+        }
+        
         stage.setScene(scene);
         stage.show();
     }
 
-    private HBox CommandPane() {
+    Button Save = new Button("Save");
+    Button add = new Button("Add");
+    Button delete = new Button("Delete");
+    
+    public HBox CommandPane() {
         HBox commandPane = new HBox();
         commandPane.setPadding(new Insets(10, 10, 10, 10));
-        Button Save = new Button("Save");
+        
         Save.setOnAction(e -> {
             Student obj = new Student();
             obj.setAddress(address1.getText());
@@ -157,8 +176,7 @@ public class addStudentView extends Application {
                 }
             }
         });
-        Button add = new Button("Add");
-        Button delete = new Button("Delete");
+       
         Button clear = new Button("Clear");
         clear.setOnAction(e -> {
             allData.clear();
@@ -236,6 +254,8 @@ public class addStudentView extends Application {
         userId1.textProperty().addListener((observable, oldValue, newValue) -> {
             LoadData(newValue);
             /*LoadData*/        });
+        
+        
 
         final VBox vbox1 = new VBox();
         vbox1.setSpacing(5);
